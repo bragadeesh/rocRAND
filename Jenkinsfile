@@ -401,7 +401,7 @@ parallel hcc_rocm:
         project_name:'rocrand-hcc-rocm',
         src_prefix:'src',
         build_prefix:'src',
-        build_command: 'mkdir build && cd build && cmake -DBUILD_TEST=ON -DBUILD_CRUSH_TEST=ON -DDEPENDENCIES_FORCE_DOWNLOAD=ON ../. && echo IMHERE' )
+        build_command: 'mkdir build && cd build && cmake -DBUILD_TEST=ON -DBUILD_CRUSH_TEST=ON -DDEPENDENCIES_FORCE_DOWNLOAD=ON ../. && make && echo IMHERE' )
 
     def print_version_closure = {
       sh  """
