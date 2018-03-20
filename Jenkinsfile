@@ -346,15 +346,15 @@ def build_pipeline( compiler_data compiler_args, docker_data docker_args, projec
 }
 
 // The following launches 3 builds in parallel: hcc-ctu, hcc-1.6 and cuda
-/*parallel hcc_ctu:
+parallel hcc_ctu:
 {
   node( 'docker && rocm' )
   {
     def docker_args = new docker_data(
-        from_image:'compute-artifactory:5001/rocm-developer-tools/hip/master/hip-hcc-ctu-ubuntu-16.04:latest',
-        build_docker_file:'dockerfile-build-hip-hcc-ctu-ubuntu-16.04',
-        install_docker_file:'dockerfile-install-hip-hcc-ctu-ubuntu-16.04',
-        docker_run_args:'--device=/dev/kfd',
+        from_image:'compute-artifactory:5001/rocm-docker-github/rocm-developer-tools/hip/master/hip-hcc-ctu-ubuntu-16.04:latest',
+        build_docker_file:'dockerfile-build-ubuntu-16.04',
+        install_docker_file:'dockerfile-rocrand-ubuntu-16.04',
+        docker_run_args:'--device=/dev/kfd --device=/dev/dri --group-add=video',
         docker_build_args:' --pull' )
 
     def compiler_args = new compiler_data(
@@ -366,7 +366,7 @@ def build_pipeline( compiler_data compiler_args, docker_data docker_args, projec
         project_name:'rocrand-hcc-ctu',
         src_prefix:'src',
         build_prefix:'src',
-        build_command: './install.sh -cd' )
+        build_command: 'mkdir build && cd build && cmake -DBUILD_TEST=ON -DBUILD_CRUSH_TEST=ON -DDEPENDENCIES_FORCE_DOWNLOAD=ON ../. && make && echo IMHERE' )
 
     def print_version_closure = {
       sh  """
@@ -379,9 +379,9 @@ def build_pipeline( compiler_data compiler_args, docker_data docker_args, projec
     build_pipeline( compiler_args, docker_args, rocrand_paths, print_version_closure )
   }
 }
-*/
 
-parallel hcc_rocm:
+
+/*parallel hcc_rocm:
 {
   node( 'docker && rocm' )
   {
@@ -413,7 +413,7 @@ parallel hcc_rocm:
 
     build_pipeline( hcc_compiler_args, hcc_docker_args, rocrand_paths, print_version_closure )
   }
-}
+}*/
 
 /*
 nvcc:
